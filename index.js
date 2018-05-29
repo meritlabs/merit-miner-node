@@ -18,6 +18,14 @@ class MeritMiner
     return meritminer.disconnectStratum();
   }
 
+  IsStratumRunning() {
+    return meritminer.isStratumRunning();
+  }
+  
+  IsMinerRunning() {
+    return meritminer.isMinerRunning();
+  }
+
 }
 
 module.exports = {

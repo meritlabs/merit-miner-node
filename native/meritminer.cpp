@@ -75,7 +75,30 @@ void start_miner(const v8::FunctionCallbackInfo<v8::Value>& args)
 
 void stop_miner(const v8::FunctionCallbackInfo<v8::Value>& args)
 {
+    assert(context);
     merit::stop_miner(context);
+}
+
+void is_stratum_running(const v8::FunctionCallbackInfo<v8::Value>& args)
+{
+    assert(context);
+
+    auto isolate = args.GetIsolate();
+
+    bool running = merit::is_stratum_running(context);
+    v8::Local<v8::Boolean> ret = v8::Boolean::New(isolate, running);
+    args.GetReturnValue().Set(ret);
+}
+
+void is_miner_running(const v8::FunctionCallbackInfo<v8::Value>& args)
+{
+    assert(context);
+
+    auto isolate = args.GetIsolate();
+
+    bool running = merit::is_miner_running(context);
+    v8::Local<v8::Boolean> ret = v8::Boolean::New(isolate, running);
+    args.GetReturnValue().Set(ret);
 }
 
 void initialize(v8::Handle<v8::Object> exports)
@@ -85,6 +108,8 @@ void initialize(v8::Handle<v8::Object> exports)
     NODE_SET_METHOD(exports, "disconnectStratum", disconnect_stratum);
     NODE_SET_METHOD(exports, "startMiner", start_miner);
     NODE_SET_METHOD(exports, "stopMiner", stop_miner);
+    NODE_SET_METHOD(exports, "isStratumRunning", is_stratum_running);
+    NODE_SET_METHOD(exports, "isMinerRunning", is_miner_running);
 }
 
 NODE_MODULE(meritminer, initialize);
