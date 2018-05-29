@@ -39,7 +39,9 @@ void connect_to_stratum(const v8::FunctionCallbackInfo<v8::Value>& args) {
 
 void disconnect_stratum(const v8::FunctionCallbackInfo<v8::Value>& args)
 {
+    merit::disconnect_stratum(context);
     merit::stop_stratum(context);
+
     auto isolate = args.GetIsolate();
     args.GetReturnValue().Set(v8::String::NewFromUtf8(isolate, "stopped stratum"));
 }
@@ -101,6 +103,28 @@ void is_miner_running(const v8::FunctionCallbackInfo<v8::Value>& args)
     args.GetReturnValue().Set(ret);
 }
 
+void is_stratum_stopping(const v8::FunctionCallbackInfo<v8::Value>& args)
+{
+    assert(context);
+
+    auto isolate = args.GetIsolate();
+
+    bool stopping = merit::is_stratum_stopping(context);
+    v8::Local<v8::Boolean> ret = v8::Boolean::New(isolate, stopping);
+    args.GetReturnValue().Set(ret);
+}
+
+void is_miner_stopping(const v8::FunctionCallbackInfo<v8::Value>& args)
+{
+    assert(context);
+
+    auto isolate = args.GetIsolate();
+
+    bool stopping = merit::is_miner_stopping(context);
+    v8::Local<v8::Boolean> ret = v8::Boolean::New(isolate, stopping);
+    args.GetReturnValue().Set(ret);
+}
+
 void initialize(v8::Handle<v8::Object> exports)
 {
     context = merit::create_context();
@@ -110,6 +134,8 @@ void initialize(v8::Handle<v8::Object> exports)
     NODE_SET_METHOD(exports, "stopMiner", stop_miner);
     NODE_SET_METHOD(exports, "isStratumRunning", is_stratum_running);
     NODE_SET_METHOD(exports, "isMinerRunning", is_miner_running);
+    NODE_SET_METHOD(exports, "isStratumStopping", is_stratum_stopping);
+    NODE_SET_METHOD(exports, "isMinerStopping", is_miner_stopping);
 }
 
 NODE_MODULE(meritminer, initialize);

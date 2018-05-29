@@ -14,6 +14,7 @@ class MeritMiner
   ConnectToStratum(url, address) {
     return meritminer.connectToStratum(url,address);
   }
+
   DisconnectStratum() {
     return meritminer.disconnectStratum();
   }
@@ -24,6 +25,14 @@ class MeritMiner
   
   IsMinerRunning() {
     return meritminer.isMinerRunning();
+  }
+
+  IsStratumStopping() {
+    return meritminer.isStratumStopping();
+  }
+  
+  IsMinerStopping() {
+    return meritminer.isMinerStopping();
   }
 
 }
