@@ -138,11 +138,18 @@ void stat_to_obj(const merit::MinerStat& s, v8::Local<v8::Object>& obj, v8::Isol
 {
     assert(isolate);
     obj->Set(v8::String::NewFromUtf8(isolate, "start"), v8::Number::New(isolate, s.start));
-    obj->Set(v8::String::NewFromUtf8(isolate, "end"), v8::Number::New(isolate, s.end));
-    obj->Set(v8::String::NewFromUtf8(isolate, "seconds"), v8::Number::New(isolate, s.seconds));
-    obj->Set(v8::String::NewFromUtf8(isolate, "attempts_per_second"), v8::Number::New(isolate, s.attempts_per_second));
-    obj->Set(v8::String::NewFromUtf8(isolate, "cycles_per_second"), v8::Number::New(isolate, s.cycles_per_second));
-    obj->Set(v8::String::NewFromUtf8(isolate, "shares_per_second"), v8::Number::New(isolate, s.shares_per_second));
+
+    if(s.seconds > 0) {
+        obj->Set(v8::String::NewFromUtf8(isolate, "end"), v8::Number::New(isolate, s.end));
+        obj->Set(v8::String::NewFromUtf8(isolate, "seconds"), v8::Number::New(isolate, s.seconds));
+        obj->Set(v8::String::NewFromUtf8(isolate, "attempts_per_second"), v8::Number::New(isolate, s.attempts_per_second));
+        obj->Set(v8::String::NewFromUtf8(isolate, "cycles_per_second"), v8::Number::New(isolate, s.cycles_per_second));
+        obj->Set(v8::String::NewFromUtf8(isolate, "shares_per_second"), v8::Number::New(isolate, s.shares_per_second));
+    } 
+
+    obj->Set(v8::String::NewFromUtf8(isolate, "attempts"), v8::Number::New(isolate, s.attempts));
+    obj->Set(v8::String::NewFromUtf8(isolate, "cycles"), v8::Number::New(isolate, s.cycles));
+    obj->Set(v8::String::NewFromUtf8(isolate, "shares"), v8::Number::New(isolate, s.shares));
 }
 
 void miner_stats(const v8::FunctionCallbackInfo<v8::Value>& args)
