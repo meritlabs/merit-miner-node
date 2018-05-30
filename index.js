@@ -39,6 +39,10 @@ class MeritMiner
     return meritminer.numberOfCores();
   }
 
+  MinerStats() {
+    return meritminer.minerStats();
+  }
+
 }
 
 module.exports = {
