@@ -35,6 +35,10 @@ class MeritMiner
     return meritminer.isMinerStopping();
   }
 
+  NumberOfCores() {
+    return meritminer.numberOfCores();
+  }
+
 }
 
 module.exports = {

@@ -125,6 +125,17 @@ void is_miner_stopping(const v8::FunctionCallbackInfo<v8::Value>& args)
     args.GetReturnValue().Set(ret);
 }
 
+void number_of_cores(const v8::FunctionCallbackInfo<v8::Value>& args)
+{
+    assert(context);
+
+    auto isolate = args.GetIsolate();
+
+    auto cores = merit::number_of_cores();
+    v8::Local<v8::Number> ret = v8::Number::New(isolate, cores);
+    args.GetReturnValue().Set(ret);
+}
+
 void initialize(v8::Handle<v8::Object> exports)
 {
     context = merit::create_context();
@@ -136,6 +147,7 @@ void initialize(v8::Handle<v8::Object> exports)
     NODE_SET_METHOD(exports, "isMinerRunning", is_miner_running);
     NODE_SET_METHOD(exports, "isStratumStopping", is_stratum_stopping);
     NODE_SET_METHOD(exports, "isMinerStopping", is_miner_stopping);
+    NODE_SET_METHOD(exports, "numberOfCores", number_of_cores);
 }
 
 NODE_MODULE(meritminer, initialize);
