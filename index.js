@@ -19,6 +19,10 @@ class MeritMiner
     return meritminer.disconnectStratum();
   }
 
+  IsStratumConnected() {
+    return meritminer.isStratumConnected();
+  }
+
   IsStratumRunning() {
     return meritminer.isStratumRunning();
   }

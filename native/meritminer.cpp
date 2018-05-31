@@ -46,6 +46,17 @@ void disconnect_stratum(const v8::FunctionCallbackInfo<v8::Value>& args)
     args.GetReturnValue().Set(v8::String::NewFromUtf8(isolate, "stopped stratum"));
 }
 
+void is_stratum_connected(const v8::FunctionCallbackInfo<v8::Value>& args)
+{
+    assert(context);
+
+    auto isolate = args.GetIsolate();
+
+    bool connected = merit::is_stratum_connected(context);
+    v8::Local<v8::Boolean> ret = v8::Boolean::New(isolate, connected);
+    args.GetReturnValue().Set(ret);
+}
+
 void start_miner(const v8::FunctionCallbackInfo<v8::Value>& args)
 {
     assert(context);
@@ -186,6 +197,7 @@ void initialize(v8::Handle<v8::Object> exports)
     context = merit::create_context();
     NODE_SET_METHOD(exports, "connectToStratum", connect_to_stratum);
     NODE_SET_METHOD(exports, "disconnectStratum", disconnect_stratum);
+    NODE_SET_METHOD(exports, "isStratumConnected", is_stratum_connected);
     NODE_SET_METHOD(exports, "startMiner", start_miner);
     NODE_SET_METHOD(exports, "stopMiner", stop_miner);
     NODE_SET_METHOD(exports, "isStratumRunning", is_stratum_running);
