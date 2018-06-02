@@ -32,6 +32,10 @@ var meritminer = require("./build/Release/meritminer");
 
 class MeritMiner 
 {
+  SetAgent(software, version) {
+    return meritminer.setAgent(software, version);
+  }
+
   StartMiner(workers, threads) {
     return meritminer.startMiner(workers, threads);
   }
