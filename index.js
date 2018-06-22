@@ -76,6 +76,10 @@ class MeritMiner
     return meritminer.numberOfCores();
   }
 
+  NumberOfGPUs() {
+    return meritminer.numberOfGPUs();
+  }
+
   MinerStats() {
     return meritminer.minerStats();
   }
