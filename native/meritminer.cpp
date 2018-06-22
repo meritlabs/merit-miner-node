@@ -118,9 +118,9 @@ void start_miner(const v8::FunctionCallbackInfo<v8::Value>& args)
     assert(context);
     auto isolate = args.GetIsolate();
 
-    if(args.Length() != 2) {
+    if(args.Length() != 3) {
         isolate->ThrowException(v8::Exception::TypeError(
-                    v8::String::NewFromUtf8(isolate, "Requests 2 arguments")));
+                    v8::String::NewFromUtf8(isolate, "Requests 3 arguments")));
         return;
     }
     if(!args[0]->IsNumber()) {
@@ -133,11 +133,17 @@ void start_miner(const v8::FunctionCallbackInfo<v8::Value>& args)
                     v8::String::NewFromUtf8(isolate, "threads argument must be a number")));
         return;
     }
+    if(!args[2]->IsNumber()) {
+        isolate->ThrowException(v8::Exception::TypeError(
+                    v8::String::NewFromUtf8(isolate, "gpu_devices argument must be a number")));
+        return;
+    }
 
     int workers = args[0]->NumberValue();
     int worker_threads = args[1]->NumberValue();
+    int gpu_devices = args[2]->NumberValue();
 
-    merit::run_miner(context, workers, worker_threads);
+    merit::run_miner(context, workers, worker_threads, gpu_devices);
 
     args.GetReturnValue().Set(v8::String::NewFromUtf8(isolate, "started miner"));
 }
