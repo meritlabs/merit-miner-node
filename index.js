@@ -36,8 +36,8 @@ class MeritMiner
     return meritminer.setAgent(software, version);
   }
 
-  StartMiner(workers, threads) {
-    return meritminer.startMiner(workers, threads);
+  StartMiner(workers, threads, gpus) {
+    return meritminer.startMiner(workers, threads, gpus);
   }
 
   StopMiner() {

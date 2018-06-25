@@ -212,7 +212,7 @@ void number_of_gpus(const v8::FunctionCallbackInfo<v8::Value>& args)
     auto isolate = args.GetIsolate();
 
     auto gpus = merit::number_of_gpus();
-    v8::Local<v8::Number> ret = v8::Number::New(isolate, cores);
+    v8::Local<v8::Number> ret = v8::Number::New(isolate, gpus);
     args.GetReturnValue().Set(ret);
 }
 
@@ -277,7 +277,7 @@ void initialize(v8::Handle<v8::Object> exports)
     NODE_SET_METHOD(exports, "isStratumStopping", is_stratum_stopping);
     NODE_SET_METHOD(exports, "isMinerStopping", is_miner_stopping);
     NODE_SET_METHOD(exports, "numberOfCores", number_of_cores);
-    NODE_SET_METHOD(exports, "NumberOfGPUs", number_of_gpus);
+    NODE_SET_METHOD(exports, "numberOfGPUs", number_of_gpus);
     NODE_SET_METHOD(exports, "minerStats", miner_stats);
 }
 
