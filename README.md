@@ -24,7 +24,7 @@ Node library that wraps [libmeritminer](https://github.com/meritlabs/libmeritmin
 
 ## Use Local Install
 
-`npm link meritminer`
+`npm link merit-miner-node`
 
 ## Directories
 
