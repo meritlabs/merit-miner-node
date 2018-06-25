@@ -36,8 +36,8 @@ class MeritMiner
     return meritminer.setAgent(software, version);
   }
 
-  StartMiner(workers, threads, gpus) {
-    return meritminer.startMiner(workers, threads, gpus);
+  StartMiner(workers, threads, gpu_devices) {
+    return meritminer.startMiner(workers, threads, gpu_devices);
   }
 
   StopMiner() {
@@ -84,6 +84,9 @@ class MeritMiner
     return meritminer.minerStats();
   }
 
+  GPUsInfo() {
+    return meritminer.gpusInfo();
+  }
 }
 
 module.exports = {
