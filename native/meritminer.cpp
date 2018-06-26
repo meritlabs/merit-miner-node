@@ -310,7 +310,6 @@ void initialize(v8::Handle<v8::Object> exports)
     NODE_SET_METHOD(exports, "numberOfCores", number_of_cores);
     NODE_SET_METHOD(exports, "numberOfGPUs", number_of_gpus);
     NODE_SET_METHOD(exports, "minerStats", miner_stats);
-    NODE_SET_METHOD(exports, "minerStats", gpus_info);
     NODE_SET_METHOD(exports, "gpusInfo", gpus_info);
 }
 
