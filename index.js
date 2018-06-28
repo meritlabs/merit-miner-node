@@ -80,6 +80,10 @@ class MeritMiner
     return meritminer.numberOfGPUs();
   }
 
+  FreeMemoryOnDevice() {
+    return meritminer.freeMemoryOnDevice();
+  }
+
   MinerStats() {
     return meritminer.minerStats();
   }
