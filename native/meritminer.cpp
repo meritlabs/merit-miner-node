@@ -296,6 +296,7 @@ void gpus_info(const v8::FunctionCallbackInfo<v8::Value>& args)
         v8::Local<v8::Object> gpu_item_info = v8::Object::New(isolate);
 
         gpu_item_info->Set(v8::String::NewFromUtf8(isolate, "id"), v8::Number::New(isolate, info[i].id));
+        gpu_item_info->Set(v8::String::NewFromUtf8(isolate, "total_memory"), v8::Number::New(isolate, info[i].total_memory));
         gpu_item_info->Set(v8::String::NewFromUtf8(isolate, "title"), v8::String::NewFromUtf8(isolate, info[i].title.c_str()));
 
         result->Set(i, gpu_item_info);
