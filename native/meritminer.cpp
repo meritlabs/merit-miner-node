@@ -30,6 +30,7 @@
  */
 #include <node.h>
 #include <iostream>
+#include <exception>
 #include <merit/miner.hpp>
 
 merit::Context* context = nullptr;
@@ -87,7 +88,7 @@ void connect_to_stratum(const v8::FunctionCallbackInfo<v8::Value>& args) {
 
     if(!merit::connect_stratum(context, *stratum_url, *address, "foobar")) {
         isolate->ThrowException(v8::Exception::Error(
-                    v8::String::NewFromUtf8(isolate, "Error connecting to the stratum pool")));
+                    v8::String::NewFromUtf8(isolate, "Error Connecting to the Pool")));
         return;
     }
     merit::run_stratum(context);
@@ -118,9 +119,9 @@ void start_miner(const v8::FunctionCallbackInfo<v8::Value>& args)
     assert(context);
     auto isolate = args.GetIsolate();
 
-    if(args.Length() != 2) {
+    if(args.Length() != 3) {
         isolate->ThrowException(v8::Exception::TypeError(
-                    v8::String::NewFromUtf8(isolate, "Requests 2 arguments")));
+                    v8::String::NewFromUtf8(isolate, "Requests 3 arguments")));
         return;
     }
     if(!args[0]->IsNumber()) {
@@ -133,11 +134,26 @@ void start_miner(const v8::FunctionCallbackInfo<v8::Value>& args)
                     v8::String::NewFromUtf8(isolate, "threads argument must be a number")));
         return;
     }
+    if(!args[2]->IsArray()) {
+        isolate->ThrowException(v8::Exception::TypeError(
+                    v8::String::NewFromUtf8(isolate, "gpu_devices argument must be an array")));
+        return;
+    }
 
     int workers = args[0]->NumberValue();
     int worker_threads = args[1]->NumberValue();
 
-    merit::run_miner(context, workers, worker_threads);
+    v8::Local<v8::Array> gpu_devices_node = v8::Local<v8::Array>::Cast(args[2]);
+    std::vector<int> gpu_devices;
+
+    for (unsigned int i = 0; i < gpu_devices_node->Length(); i++ ) {
+        int value = gpu_devices_node->Get(i)->NumberValue();
+        gpu_devices.push_back(value);
+    }
+
+
+
+    merit::run_miner(context, workers, worker_threads, gpu_devices);
 
     args.GetReturnValue().Set(v8::String::NewFromUtf8(isolate, "started miner"));
 }
@@ -201,6 +217,26 @@ void number_of_cores(const v8::FunctionCallbackInfo<v8::Value>& args)
     args.GetReturnValue().Set(ret);
 }
 
+void free_memory_on_gpu(const v8::FunctionCallbackInfo<v8::Value>& args)
+{
+    auto isolate = args.GetIsolate();
+
+    int device = args[0]->NumberValue();
+
+    auto memory = merit::free_memory_on_gpu(device);
+    v8::Local<v8::Number> ret = v8::Number::New(isolate, memory);
+    args.GetReturnValue().Set(ret);
+}
+
+void number_of_gpus(const v8::FunctionCallbackInfo<v8::Value>& args)
+{
+    auto isolate = args.GetIsolate();
+
+    auto gpus = merit::number_of_gpus();
+    v8::Local<v8::Number> ret = v8::Number::New(isolate, gpus);
+    args.GetReturnValue().Set(ret);
+}
+
 void stat_to_obj(const merit::MinerStat& s, v8::Local<v8::Object>& obj, v8::Isolate* isolate)
 {
     assert(isolate);
@@ -248,6 +284,28 @@ void miner_stats(const v8::FunctionCallbackInfo<v8::Value>& args)
     args.GetReturnValue().Set(ret);
 }
 
+void gpus_info(const v8::FunctionCallbackInfo<v8::Value>& args)
+{
+    auto isolate = args.GetIsolate();
+
+    auto info = merit::gpus_info();
+
+    v8::Local<v8::Array> result = v8::Array::New(isolate);
+
+    for (size_t i = 0; i < info.size(); ++i) {
+        v8::Local<v8::Object> gpu_item_info = v8::Object::New(isolate);
+
+        gpu_item_info->Set(v8::String::NewFromUtf8(isolate, "id"), v8::Number::New(isolate, info[i].id));
+        gpu_item_info->Set(v8::String::NewFromUtf8(isolate, "total_memory"), v8::Number::New(isolate, info[i].total_memory));
+        gpu_item_info->Set(v8::String::NewFromUtf8(isolate, "title"), v8::String::NewFromUtf8(isolate, info[i].title.c_str()));
+
+        result->Set(i, gpu_item_info);
+    }
+
+    args.GetReturnValue().Set(result);
+}
+
+
 void initialize(v8::Handle<v8::Object> exports)
 {
     merit::init();
@@ -263,7 +321,10 @@ void initialize(v8::Handle<v8::Object> exports)
     NODE_SET_METHOD(exports, "isStratumStopping", is_stratum_stopping);
     NODE_SET_METHOD(exports, "isMinerStopping", is_miner_stopping);
     NODE_SET_METHOD(exports, "numberOfCores", number_of_cores);
+    NODE_SET_METHOD(exports, "numberOfGPUs", number_of_gpus);
+    NODE_SET_METHOD(exports, "freeMemoryOnDevice", free_memory_on_gpu);
     NODE_SET_METHOD(exports, "minerStats", miner_stats);
+    NODE_SET_METHOD(exports, "gpusInfo", gpus_info);
 }
 
 NODE_MODULE(meritminer, initialize);

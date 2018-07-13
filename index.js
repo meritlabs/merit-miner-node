@@ -36,8 +36,8 @@ class MeritMiner
     return meritminer.setAgent(software, version);
   }
 
-  StartMiner(workers, threads) {
-    return meritminer.startMiner(workers, threads);
+  StartMiner(workers, threads, gpu_devices) {
+    return meritminer.startMiner(workers, threads, gpu_devices);
   }
 
   StopMiner() {
@@ -76,10 +76,21 @@ class MeritMiner
     return meritminer.numberOfCores();
   }
 
+  NumberOfGPUs() {
+    return meritminer.numberOfGPUs();
+  }
+
+  FreeMemoryOnDevice() {
+    return meritminer.freeMemoryOnDevice();
+  }
+
   MinerStats() {
     return meritminer.minerStats();
   }
 
+  GPUsInfo() {
+    return meritminer.gpusInfo();
+  }
 }
 
 module.exports = {
