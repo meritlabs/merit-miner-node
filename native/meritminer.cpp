@@ -250,6 +250,7 @@ void miner_stats(const v8::FunctionCallbackInfo<v8::Value>& args)
 
 void initialize(v8::Handle<v8::Object> exports)
 {
+    merit::init();
     context = merit::create_context();
     NODE_SET_METHOD(exports, "setAgent", set_agent);
     NODE_SET_METHOD(exports, "connectToStratum", connect_to_stratum);
