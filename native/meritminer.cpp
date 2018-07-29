@@ -298,6 +298,10 @@ void gpus_info(const v8::FunctionCallbackInfo<v8::Value>& args)
         gpu_item_info->Set(v8::String::NewFromUtf8(isolate, "id"), v8::Number::New(isolate, info[i].id));
         gpu_item_info->Set(v8::String::NewFromUtf8(isolate, "total_memory"), v8::Number::New(isolate, info[i].total_memory));
         gpu_item_info->Set(v8::String::NewFromUtf8(isolate, "title"), v8::String::NewFromUtf8(isolate, info[i].title.c_str()));
+        gpu_item_info->Set(v8::String::NewFromUtf8(isolate, "temperature"), v8::Number::New(isolate, info[i].temperature));
+        gpu_item_info->Set(v8::String::NewFromUtf8(isolate, "gpu_util"), v8::Number::New(isolate, info[i].gpu_util));
+        gpu_item_info->Set(v8::String::NewFromUtf8(isolate, "memory_util"), v8::Number::New(isolate, info[i].memory_util));
+        gpu_item_info->Set(v8::String::NewFromUtf8(isolate, "fan_speed"), v8::Number::New(isolate, info[i].fan_speed));
 
         result->Set(i, gpu_item_info);
     }
