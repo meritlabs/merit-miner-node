@@ -36,7 +36,7 @@ Node library that wraps [libmeritminer](https://github.com/meritlabs/libmeritmin
 
 ## License
 
-Copyright (c) 2017-2020 The Merit Foundation
+Copyright (c) 2017-2021 The Merit Foundation
 libmeritminer is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
